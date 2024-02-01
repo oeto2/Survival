@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+//데미지 입는 부분 구현해라.
 public interface IDamagable
 {
     void TakePhysicalDamage(int damageAmount);
 }
-
 
 [System.Serializable]
 public class Condition
@@ -46,7 +47,7 @@ public class PlayerConditions : MonoBehaviour, IDamagable
     public float noHungerHealthDecay;
 
     public UnityEvent onTakeDamge;
-
+    
     void Start()
     {
         health.curValue = health.startValue;
@@ -96,7 +97,11 @@ public class PlayerConditions : MonoBehaviour, IDamagable
 
     public void TakePhysicalDamage(int damageAmount)
     {
+        Debug.Log("플레이어 데미지 입는중");
+
         health.Subtract(damageAmount);
+        
+        //이벤트 호출
         onTakeDamge?.Invoke();
     }
 }

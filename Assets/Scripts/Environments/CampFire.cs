@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CampFire : MonoBehaviour
 {
-    public int damage;
+    public int damage = 10;
     public float damageRate;
 
     private List<IDamagable> thingsToDamage = new List<IDamagable>();
@@ -14,6 +14,7 @@ public class CampFire : MonoBehaviour
         InvokeRepeating("DealDamage", 0, damageRate);
     }
 
+    //일정 시간마다 데미지를 줌.
     void DealDamage()
     {
         for(int i =0; i<thingsToDamage.Count; i++)
