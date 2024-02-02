@@ -17,7 +17,7 @@ public class CampFire : MonoBehaviour
     //일정 시간마다 데미지를 줌.
     void DealDamage()
     {
-        for(int i =0; i<thingsToDamage.Count; i++)
+        for (int i = 0; i < thingsToDamage.Count; i++)
         {
             thingsToDamage[i].TakePhysicalDamage(damage);
         }
@@ -25,7 +25,7 @@ public class CampFire : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.TryGetComponent(out IDamagable damagable))
+        if (other.gameObject.TryGetComponent(out IDamagable damagable))
         {
             thingsToDamage.Add(damagable);
         }
@@ -33,9 +33,18 @@ public class CampFire : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.TryGetComponent(out IDamagable damagable))
+        //int x = 5;
+         Add(out int x);
+
+        if (other.gameObject.TryGetComponent(out IDamagable damagable))
         {
             thingsToDamage.Remove(damagable);
         }
+    }
+
+    void Add(out int _number)
+    {
+        _number = 5;
+        _number += 5;
     }
 }

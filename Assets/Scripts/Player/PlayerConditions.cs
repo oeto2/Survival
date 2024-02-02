@@ -97,8 +97,6 @@ public class PlayerConditions : MonoBehaviour, IDamagable
 
     public void TakePhysicalDamage(int damageAmount)
     {
-        Debug.Log("플레이어 데미지 입는중");
-
         health.Subtract(damageAmount);
         
         //이벤트 호출
