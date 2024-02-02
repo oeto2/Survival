@@ -15,7 +15,7 @@ public class ItemSlot
 
 public class Inventory : MonoBehaviour
 {
-    public ItemSlotUI[] uiSlot;
+    public ItemSlotUI[] uiSlots;
     public ItemSlot[] slots;
 
     public GameObject inventoryWindow;
@@ -55,13 +55,13 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         //inventoryWindow.SetActive(true);
-        slots = new ItemSlot[uiSlot.Length];
+        slots = new ItemSlot[uiSlots.Length];
 
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i] = new ItemSlot();
-            uiSlot[i].index = i;
-            uiSlot[i].Clear();
+            uiSlots[i].index = i;
+            uiSlots[i].Clear();
         }
 
         ClearSelectItemWindow();
@@ -132,9 +132,9 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].item != null)
-                uiSlot[i].Set(slots[i]);
+                uiSlots[i].Set(slots[i]);
             else
-                uiSlot[i].Clear();
+                uiSlots[i].Clear();
         }
     }
 
@@ -179,8 +179,8 @@ public class Inventory : MonoBehaviour
         }
 
         useButton.SetActive(selectedItem.item.type == ItemType.Consumable);
-        equipButton.SetActive(selectedItem.item.type == ItemType.Equipable && !uiSlot[index].equipped);
-        unequipButton.SetActive(selectedItem.item.type == ItemType.Equipable && uiSlot[index].equipped);
+        equipButton.SetActive(selectedItem.item.type == ItemType.Equipable && !uiSlots[index].equipped);
+        unequipButton.SetActive(selectedItem.item.type == ItemType.Equipable && uiSlots[index].equipped);
         dropButton.SetActive(true);
     }
 
@@ -220,17 +220,32 @@ public class Inventory : MonoBehaviour
 
     public void OnEquipButton()
     {
+        if (uiSlots[curEquipIndex].equipped)
+        {
+            UnEquip(curEquipIndex);
+        }
 
+        uiSlots[selectedItemIndex].equipped = true;
+        curEquipIndex = selectedItemIndex;
+        EquipManager.instance.EquipNew(selectedItem.item);
+        UpdateUI();
+
+        SelectItem(selectedItemIndex);
     }
 
     void UnEquip(int index)
     {
+        uiSlots[index].equipped = false;
+        EquipManager.instance.UnEquip();
+        UpdateUI();
 
-    }
+        if (selectedItemIndex == index)
+            SelectItem(index);
+    }   
 
     public void OnUnEquipButton()
     {
-
+        UnEquip(selectedItemIndex);
     }
 
     public void OnDropButton()
@@ -244,7 +259,7 @@ public class Inventory : MonoBehaviour
         selectedItem.quantity--;
         if (selectedItem.quantity <= 0)
         {
-            if (uiSlot[selectedItemIndex].equipped)
+            if (uiSlots[selectedItemIndex].equipped)
             {
                 UnEquip(selectedItemIndex);
             }
